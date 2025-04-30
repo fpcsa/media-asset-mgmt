@@ -60,6 +60,7 @@ Create a `.env` file in the root with the following:
 MINIO_ENDPOINT=minio:9000 
 # for signing presigned URLs for streaming .ts and let them be available on browser
 # 9002 is the port defined in nginx port mapping for minio
+# format is <host_vm>:<port>
 MINIO_PUBLIC_HOST=localhost:9002 
 MINIO_USR=<your_username>
 MINIO_PWD=<your_pwd>
@@ -82,9 +83,35 @@ ALLOWED_ORIGINS=http://localhost,http://127.0.0.1
 ---
 
 ## Running the Services
+First let's build and start the docker compose
 
 ```bash
 sudo docker compose up --build
+```
+
+Then go on MinIO UI ```<host>:9001``` login with MINIO_USR and MINIO_PWD and create a bucket named ```vod``` or the one you have defined as MINIO_BUCKET_VOD.
+**This step is very important since it is not done automatically**.
+
+The ```vod``` bucket will store the .m3u8 file and .ts files for each video transcoded/remuxed
+
+Then create another bucket named e.g. ```videolibrary``` or ```playlist``` which will store your media assets, such as videos or images. 
+
+Finally, create two paths inside the ```videolibrary``` or ```playlist``` bucket:
+1. ```video``` Here you should place with a custom service or manually the videos you want to transcode or remux.
+2. ```img``` Here you should place with a custom service or manually the images you want to stream.
+
+Then you can start calling ```/transcode``` service to start transcoding or remuxing and then ```/stream/{video_bucket}/{video_path}/playlist.m3u8``` to gather HLS streaming response.
+
+API Docs:
+1. ```http://<vm_ip>:8004/docs```: OpenAPI definition for Transcoding API reference
+2. ```http://<vm_ip>:8005/docs```: OpenAPI definition for VOD API reference
+
+## Deleting the services
+If there is a need to change anything after building the ```docker compose```, remember to remove the services first. 
+This will not delete MinIO buckets and objects.
+
+```bash
+sudo docker compose down
 ```
 ---
 
