@@ -14,7 +14,7 @@ This repository provides an all-in-one solutions that fully integrates through `
 - `vod/redis_adapter.py`: Utility for managing Redis-based caching of playlists.
 - `nginx/nginx.conf`: Configuration file for NGINX reverse-proxy useful to expose HLS playlist and .ts segments outside docker internal network.
 
-![Architecture](media_MAM.png)
+![Architecture](media_MAM_MGMT.png)
 
 ## Features
 
