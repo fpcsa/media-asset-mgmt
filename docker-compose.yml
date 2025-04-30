@@ -1,0 +1,53 @@
+services:
+
+  redis:
+    image: redis:alpine
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+
+  minio:
+    image: minio/minio
+    container_name: minio-server
+    volumes:
+      - ./minio-data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USR}
+      MINIO_ROOT_PASSWORD: ${MINIO_PWD}
+    command: server /data --console-address ":9001"
+
+  transcode-server:
+    build: ./transcode
+    container_name: transcode-server
+    ports:
+      - "8004:8004"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - minio
+
+  vod-server:
+    build: ./vod
+    container_name: vod-server
+    ports:
+      - "8005:8005"
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - minio
+      
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "9002:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - minio
+
