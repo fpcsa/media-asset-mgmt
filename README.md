@@ -5,7 +5,7 @@ Media Asset Management (MAM) solution that fully integrates both transcoding and
 
 # Video Transcoding and VoD FastAPI Services
 
-This repository provides an all-in-one solutions that fully integrates through ```docker-compose``` two FastAPI-based microservices for handling video transcoding and video/image streaming (VoD - Video on Demand). The system integrates with **MinIO** for object storage, **FFmpeg** for video conversion to HLS format, and **Redis** for playlist caching.
+This repository provides an all-in-one solution that fully integrates through ```docker-compose``` two **FastAPI-based** microservices for handling video transcoding and video (VoD - Video on Demand) and image streaming . The system integrates with **MinIO** for object storage, **FFmpeg** for video conversion to HLS format, and **Redis** for playlist caching.
 
 ## Architecture Overview
 
